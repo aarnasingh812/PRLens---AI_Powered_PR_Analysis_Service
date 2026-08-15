@@ -115,7 +115,7 @@ flowchart TD
     O -- No --> P[Aggregate All Results into JSON Payload]
     P --> Q[Store Final Payload in Redis Result Backend]
     
-    R[Client Polls GET /task_status/{task_id}/] --> S{Check Redis Task State}
+    R["Client Polls GET /task_status/{task_id}/"] --> S{Check Redis Task State}
     S -- PENDING / STARTED --> T[Return Status: PENDING / STARTED]
     S -- SUCCESS --> U[Return Status: SUCCESS + Full Analysis JSON]
     S -- FAILURE --> V[Return Status: FAILURE + Error Details]
