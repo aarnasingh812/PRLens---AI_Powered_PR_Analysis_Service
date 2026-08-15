@@ -1,7 +1,8 @@
 fastapi
-redis-om
-uvicorn
-django
-celery
-dotenv
+uvicorn[standard]
+celery[redis]
+redis
+groq
+requests
+python-dotenv
 pydantic
