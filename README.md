@@ -89,40 +89,6 @@ graph TD
 
 ---
 
-### PR Analysis Execution Flowchart
-
-Here is the step-by-step lifecycle of an analysis task from initiation to completion:
-
-```mermaid
-flowchart TD
-    A[Start: POST /start_task/] --> B[Validate Request Body via Pydantic]
-    B --> C[Generate Celery Task ID & Push to Redis Queue]
-    C --> D[Return Task ID & Status 'task started' to Client]
-    
-    E[Celery Worker Picks Up Task] --> F[Parse repo_url to extract Owner & Repo]
-    F --> G[Fetch List of Changed Files via GitHub API]
-    
-    G --> H{For Each File in PR}
-    H --> I[Fetch Base64 Raw Content from GitHub]
-    I --> J[Decode Base64 Content]
-    J --> K[Construct Structured LLM Prompt]
-    K --> L[Invoke Groq API with llama-3.3-70b-versatile]
-    L --> M[Receive AI Feedback: Style, Bugs, Performance, Best Practices]
-    M --> N[Append File Analysis to Results List]
-    
-    N --> O{More Files?}
-    O -- Yes --> H
-    O -- No --> P[Aggregate All Results into JSON Payload]
-    P --> Q[Store Final Payload in Redis Result Backend]
-    
-    R["Client Polls GET /task_status/{task_id}/"] --> S{Check Redis Task State}
-    S -- PENDING / STARTED --> T[Return Status: PENDING / STARTED]
-    S -- SUCCESS --> U[Return Status: SUCCESS + Full Analysis JSON]
-    S -- FAILURE --> V[Return Status: FAILURE + Error Details]
-```
-
----
-
 ## 📁 Project Directory Structure
 
 ```
