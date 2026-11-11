@@ -3,3 +3,5 @@ Env
 env/
 venv/
 __pycache__/
+*.pem
+celerybeat-schedule*
