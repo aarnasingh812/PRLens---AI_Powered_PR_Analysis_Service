@@ -2,7 +2,10 @@ fastapi
 uvicorn[standard]
 celery[redis]
 redis
-groq
+google-genai>=2.29,<3
+httpx
 requests
 python-dotenv
-pydantic
+pydantic>=2
+psycopg[binary]
+PyJWT[crypto]

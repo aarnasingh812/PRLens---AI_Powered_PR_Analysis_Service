@@ -1,10 +1,9 @@
-from groq import Groq
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+from .gemini import DEFAULT_MODEL, generate_json
 
-key = os.getenv('GROQ_API_KEY')
+load_dotenv()
 
 
 def analyze_code_with_llm(file_content: str, file_name: str) -> str:
@@ -30,21 +29,10 @@ Provide a detailed JSON output with the structure:
         }}
     ]
 }}
-```json
 """
 
-    client = Groq(api_key=key)
-    completion = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0.6,
-        top_p=1
-    )
-
-    # BUG FIX: was `message.conten` (missing 't')
-    return completion.choices[0].message.content
+    model = os.getenv("PRLENS_REVIEW_MODEL", DEFAULT_MODEL)
+    response = generate_json(model, prompt, max_output_tokens=4096)
+    if not response.text:
+        raise ValueError("Gemini returned no review content")
+    return response.text
